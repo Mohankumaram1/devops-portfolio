@@ -10,6 +10,7 @@
       --text: #333;
       --accent: #0d47a1;
       --card: #ffffff;
+      --hover-glow: #64b5f6;
     }
 
     [data-theme="dark"] {
@@ -17,6 +18,7 @@
       --text: #e0e0e0;
       --accent: #64b5f6;
       --card: #1e1e1e;
+      --hover-glow: #ff4081;
     }
 
     body {
@@ -57,6 +59,19 @@
       font-weight: bold;
     }
 
+    .links a {
+      margin: 0 10px;
+      font-size: 18px;
+      text-decoration: none;
+      color: white;
+      transition: 0.3s;
+    }
+
+    .links a:hover {
+      color: var(--hover-glow);
+      text-shadow: 0 0 5px var(--hover-glow);
+    }
+
     section {
       max-width: 960px;
       margin: 30px auto;
@@ -65,12 +80,17 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       opacity: 0;
-      transform: translateY(20px);
-      animation: fadeIn 0.6s forwards;
+      transform: translateY(30px);
+      transition: all 0.6s ease-in-out;
     }
 
-    section:nth-child(n+2) {
-      animation-delay: 0.2s;
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section:hover {
+      box-shadow: 0 0 10px var(--hover-glow);
     }
 
     h2 {
@@ -90,8 +110,8 @@
     }
 
     a:hover {
-      color: #ff4081;
-      text-shadow: 0 0 5px #ff4081;
+      color: var(--hover-glow);
+      text-shadow: 0 0 5px var(--hover-glow);
     }
 
     .banner {
@@ -104,27 +124,20 @@
       max-width: 600px;
       border-radius: 8px;
     }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
   </style>
 </head>
 <body>
 
 <header>
-  <button class="toggle-btn" onclick="toggleTheme()">Toggle Mode</button>
+  <button class="toggle-btn" onclick="toggleTheme()">🌗 Toggle Mode</button>
   <img src="profile1.jpeg" alt="Mohan Kumar Photo">
   <h1>Mohan Kumar A M</h1>
   <p>DevOps Engineer</p>
-  <p>
-    <a href="mailto:mohankumaram199@gmail.com">mohankumaram199@gmail.com</a> |
-    <a href="https://linkedin.com/in/mohan-kumar-a-m-864b54335" target="_blank">LinkedIn</a> |
-    <a href="https://github.com/Mohankumaram1" target="_blank">GitHub</a>
-  </p>
+  <div class="links">
+    <a href="mailto:mohankumaram199@gmail.com">📧 Email</a>
+    <a href="https://linkedin.com/in/mohan-kumar-a-m-864b54335" target="_blank">🔗 LinkedIn</a>
+    <a href="https://github.com/Mohankumaram1" target="_blank">💻 GitHub</a>
+  </div>
   <p>📞 +91 8095662680</p>
 </header>
 
@@ -201,6 +214,21 @@
     const current = document.documentElement.getAttribute('data-theme');
     document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
   }
+
+  // Animate sections on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.1
+  });
+
+  document.querySelectorAll("section").forEach(section => {
+    observer.observe(section);
+  });
 </script>
 
 </body>
